@@ -10,12 +10,11 @@ for text in textList:
     text = re.sub(r"\W", "", text)
     newText = ""
 
-    if re.search(r"[aeiou]*[a-z]", text):
+    if re.search(r"\b[aeiouy]\w", text, re.IGNORECASE):
         newText = text + "yay"
     else:
         newText = text[1:] + text[:1] + "ay"
-
-newTextList.append(newText)
+    newTextList.append(newText)
 
 
 print(" ".join(newTextList))
