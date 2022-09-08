@@ -5,22 +5,31 @@ screenType: str = input("What kind of screntype are you using? ")
 screenType = screenType.lower()
 
 
-def get_bluelight_from_hours(type: str):
+def get_bluelight_from_hours(screentype: str):
     hours: int = int(input("Okay. How many hours on average do you use it? "))
-    if type == "PC":
+    if screentype == "PC":
+        if hours <= 7:
+            print("Good job! You are under the limit for that device.")
+            exit()
         print(
             "You should spend no more than 7 hours on the computer. You are currently spending "
             + str(hours - 7)
             + " too many hours."
         )
-    if type == "Tablet":
+    if screentype == "Tablet":
+        if hours <= 4:
+            print("Good job! You are under the limit for that device.")
+            exit()
         print(
             "You should not spend more than 4 hours a day on this device. You are currently spending "
             + str(hours - 4)
             + " too many hours on your device."
         )
 
-    if type == "Phone":
+    if screentype == "Phone":
+        if hours <= 2:
+            print("Good job! You are under the limit for that device.")
+            exit()
         print(
             "You should not spend more than 2 hours a day on this device. You are currently spending "
             + str(hours - 2)
@@ -36,4 +45,4 @@ elif screenType == "phone":
     get_bluelight_from_hours("Phone")
 else:
     print("Sorry. I don't know what that device is yet.")
-    exit
+    exit()
