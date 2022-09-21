@@ -4,7 +4,7 @@ import math
 player1 = input("What is the name of player 1? ")
 player2 = input("What is the name of player 2? ")
 
-number = 10
+number = math.floor(random.random() * 100)
 counter1 = 0
 counter2 = 0
 
