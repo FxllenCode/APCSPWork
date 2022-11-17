@@ -2,6 +2,8 @@ import csv
 from termcolor import cprint
 from prettytable import PrettyTable
 
+# pip -r requirements.txt
+# python3 data_project.py
 reader = csv.DictReader(open("AviationData.csv"))
 rows: list = []
 
@@ -36,7 +38,7 @@ def important_output(x):
 
 
 # Argument parser to simply creation of "commands" and "flags" for the program
-# TODO: Rewrite using classes
+# TODO: Rewrite using classes done!
 
 
 class Command:
@@ -58,30 +60,66 @@ def help_s(commands: list[Command]):
         command.help()
 
 
-# Create a function that will be called inside the Command class that uses PrettyTable to display the data in a table that was given to the user through the arguments of the Command class
-def search(field: str, value: str):
-    table = PrettyTable()
-    table.field_names = rows[0].keys()
+def fatalities(type: str, year: str):
+    if type == "average":
+        total = 0
+        count = 0
+        for row in rows:
+            if row["date"][:4] == year:
+                if row["fatal"] != "" and (
+                    isinstance(row["fatal"], int) or row["fatal"].isnumeric()
+                ):
+                    total += int(row["fatal"])
+                    count += 1
+        data_output(
+            f"Average fatalities per accident in {year}: {round(total / count, 2)}"
+        )
+    elif type == "total":
+        total = 0
+        for row in rows:
+            if row["date"][:4] == year:
+                if row["fatal"] != "" and (
+                    isinstance(row["fatal"], int) or row["fatal"].isnumeric()
+                ):
+                    total += int(row["fatal"])
+        data_output(f"Total fatalities in {year}: {total}")
+
+
+def accidents(year: str):
+    count = 0
     for row in rows:
-        if row[field.lower()] == value:
-            table.add_row(row.values())
+        if row["date"][:4] == year:
+            count += 1
+    data_output(f"Number of accidents in {year}: {count}")
+
+
+def registration(reg: str):
+    table = PrettyTable()
+    table.field_names = ["Date", "Location", "Aircraft", "Damage"]
+    for row in rows:
+        if row["registration"].lower() == reg:
+            table.add_row(
+                [
+                    row["date"],
+                    row["location"],
+                    row["make"] + " " + row["model"],
+                    row["damage"],
+                ]
+            )
     print(table)
 
 
-# Create a function that will be called inside the Command class, for a command that will find the average number of fatalities in a given year
-def average_fatalities(year: str):
-    total_fatalities = 0
-    total_incidents = 0
+def aircraft_manufacturer(make: str):
+    table = PrettyTable()
+    table.field_names = ["Make", "Number of Accidents"]
+    number_of_accidents = 0
     for row in rows:
-        if row["date"][0:4] == year:
-            total_incidents += 1
+        if row["make"].lower() == make:
+            number_of_accidents += 1
 
-            if row["fatal"] != "" or row["fatal"] != "0":
-                total_fatalities += int(row["fatal"])
+    table.add_row([make, number_of_accidents])
 
-    print(
-        f"Average fatalities per incident in {year}: {total_fatalities / total_incidents}"
-    )
+    print(table)
 
 
 def register_commands():
@@ -96,20 +134,37 @@ def register_commands():
     )
     commands.append(
         Command(
-            "search",
-            "Searches for a value in a field",
-            ["field", "value"],
-            search,
+            "fatalities",
+            "Finds the average number of fatalities in a given year",
+            ["type", "year"],
+            fatalities,
         )
     )
     commands.append(
         Command(
-            "average_fatalities",
-            "Finds the average number of fatalities in a given year",
+            "accidents",
+            "Finds the number of accidents in a given year",
             ["year"],
-            average_fatalities,
+            accidents,
         )
     )
+    commands.append(
+        Command(
+            "registration",
+            "Finds the type of damage and type of aircraft a certain registration was involved in",
+            ["registration"],
+            registration,
+        )
+    )
+    commands.append(
+        Command(
+            "aircraft_manufacturer",
+            "Finds the amount of accidents for each aircraft manufucturer",
+            ["make"],
+            aircraft_manufacturer,
+        )
+    )
+
     commands.append(
         Command("help", "Displays this help menu", [], lambda: help_s(commands))
     )
@@ -137,4 +192,4 @@ heading_output("Welcome to the NTSB lookup tool!")
 normal_output("This tool will allow you to search for aviation accidents by keyword.")
 
 while True:
-    parse_args(input("Enter a command: <command> <value?> <flag?> "))
+    parse_args(input("Enter a command: "))
