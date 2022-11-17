@@ -37,8 +37,7 @@ def important_output(x):
     cprint(x, "blue", attrs=["bold", "reverse", "blink"])
 
 
-# Argument parser to simply creation of "commands" and "flags" for the program
-# TODO: Rewrite using classes done!
+# TODO: ~~Rewrite using classes~~ done!
 
 
 class Command:
