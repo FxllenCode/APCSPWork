@@ -5,6 +5,8 @@ I had to do this for APCSP. I've already done programming many times in the past
 
 Please note that this is likely more advanced then it should be. The stuff we did on day 1, etc., is probably NOT what we did in class, but a more advanced version. 
 
+I can't imagine this is helpful to anyone, but it's here!
+
 ## Why python?
 For some reason, my school district likes to use the sluggish snake language to teach students to program.
 
