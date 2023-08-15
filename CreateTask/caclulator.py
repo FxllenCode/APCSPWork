@@ -2,7 +2,6 @@ from termcolor import cprint
 import math
 
 # Setup different types of output colors and details using cprint and colored from termcolor
-# Feel free to change these to your liking!
 
 def normal_output(x):
     cprint(x, "white", "on_grey")
